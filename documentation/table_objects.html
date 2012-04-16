@@ -1,0 +1,182 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>biom-format Table objects &mdash; biom-format.org</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="top" title="biom-format.org" href="../index.html" />
+    <link rel="up" title="BIOM Documentation" href="index.html" />
+    <link rel="prev" title="The biom file format" href="biom_format.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>biom-format.org</span></a></h1>
+        <h2 class="heading"><span>biom-format Table objects</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="biom_format.html">The biom file format</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="biom-format-table-objects">
+<span id="table-objects"></span><h1>biom-format <tt class="docutils literal"><span class="pre">Table</span></tt> objects<a class="headerlink" href="#biom-format-table-objects" title="Permalink to this headline">¶</a></h1>
+<p>The biom-format project provides rich <tt class="docutils literal"><span class="pre">Table</span></tt> objects to support use of the BIOM file format. The objects encapsulate matrix data (such as OTU counts) and abstract the interaction away from the programmer. This provides the immediate benefit of the programmer not having to worry about what the underlying data object is, and in turn allows for different data representations to be supported. Currently, biom-format supports a <tt class="docutils literal"><span class="pre">dense</span></tt> object built off of <tt class="docutils literal"><span class="pre">numpy.array</span></tt> (<a class="reference external" href="http://http://numpy.scipy.org/">NumPy</a>) and a <tt class="docutils literal"><span class="pre">sparse</span></tt> object built off of Python dictionaries.</p>
+<div class="section" id="biom-format-table-factory-method">
+<h2>biom-format <tt class="docutils literal"><span class="pre">table_factory</span></tt> method<a class="headerlink" href="#biom-format-table-factory-method" title="Permalink to this headline">¶</a></h2>
+<p>Generally, construction of a <tt class="docutils literal"><span class="pre">Table</span></tt> subclass will be through the <tt class="docutils literal"><span class="pre">table_factory</span></tt> method. This method facilitates any necessary data conversions and supports a wide variety of input data types.</p>
+</div>
+<div class="section" id="description-of-available-table-objects">
+<h2>Description of available <tt class="docutils literal"><span class="pre">Table</span></tt> objects<a class="headerlink" href="#description-of-available-table-objects" title="Permalink to this headline">¶</a></h2>
+<p>There are multiple objects available but some of them are unofficial abstract base classes (does not use the <tt class="docutils literal"><span class="pre">abc</span></tt> module for historical reasons). In practice, the objects used should be the derived Tables such as <tt class="docutils literal"><span class="pre">SparseOTUTable</span></tt> or <tt class="docutils literal"><span class="pre">DenseGeneTable</span></tt>.</p>
+<div class="section" id="abstract-base-classes">
+<h3>Abstract base classes<a class="headerlink" href="#abstract-base-classes" title="Permalink to this headline">¶</a></h3>
+<p>Abstract base classes establish standard interfaces for subclassed types and provide common functionality for derived types.</p>
+<div class="section" id="table">
+<h4><tt class="docutils literal"><span class="pre">Table</span></tt><a class="headerlink" href="#table" title="Permalink to this headline">¶</a></h4>
+<p><tt class="docutils literal"><span class="pre">Table</span></tt> is a container object and an abstract base class that provides a common and required API for subclassed objects. Through the use of private interfaces, it is possible to create public methods that operate on the underlying datatype without having to implement each method in each subclass. For instance, <tt class="docutils literal"><span class="pre">Table.iterSamplesData</span></tt> will return a generator that always yields <tt class="docutils literal"><span class="pre">numpy.array</span></tt> vectors for each sample regardless of how the table data is actually stored. This functionality results from derived classes implementing private interfaces, such as <tt class="docutils literal"><span class="pre">Table._conv_to_np</span></tt>.</p>
+</div>
+<div class="section" id="otutable">
+<h4><tt class="docutils literal"><span class="pre">OTUTable</span></tt><a class="headerlink" href="#otutable" title="Permalink to this headline">¶</a></h4>
+<p>The <tt class="docutils literal"><span class="pre">OTUTable</span></tt> base class provides functionality specific for OTU tables. Currently, it only provides a static private member variable that describes its <tt class="docutils literal"><span class="pre">BIOM</span></tt> type. This object was stubbed out incase future methods are developed that do not make sense with the context of, say, an MG-RAST metagenomic abundance table. It is advised to always use an object that subclasses <tt class="docutils literal"><span class="pre">OTUTable</span></tt> if the analysis is on OTU data.</p>
+</div>
+<div class="section" id="pathwaytable">
+<h4><tt class="docutils literal"><span class="pre">PathwayTable</span></tt><a class="headerlink" href="#pathwaytable" title="Permalink to this headline">¶</a></h4>
+<p>A table type to represent gene pathways.</p>
+</div>
+<div class="section" id="functiontable">
+<h4><tt class="docutils literal"><span class="pre">FunctionTable</span></tt><a class="headerlink" href="#functiontable" title="Permalink to this headline">¶</a></h4>
+<p>A table type to represent gene functions.</p>
+</div>
+<div class="section" id="orthologtable">
+<h4><tt class="docutils literal"><span class="pre">OrthologTable</span></tt><a class="headerlink" href="#orthologtable" title="Permalink to this headline">¶</a></h4>
+<p>A table type to represent gene orthologs.</p>
+</div>
+<div class="section" id="genetable">
+<h4><tt class="docutils literal"><span class="pre">GeneTable</span></tt><a class="headerlink" href="#genetable" title="Permalink to this headline">¶</a></h4>
+<p>A table type to represent genes.</p>
+</div>
+<div class="section" id="metabolitetable">
+<h4><tt class="docutils literal"><span class="pre">MetaboliteTable</span></tt><a class="headerlink" href="#metabolitetable" title="Permalink to this headline">¶</a></h4>
+<p>A table type to represent metabolite profiles.</p>
+</div>
+<div class="section" id="taxontable">
+<h4><tt class="docutils literal"><span class="pre">TaxonTable</span></tt><a class="headerlink" href="#taxontable" title="Permalink to this headline">¶</a></h4>
+<p>A table type to represent taxonomies.</p>
+</div>
+</div>
+<div class="section" id="container-classes">
+<h3>Container classes<a class="headerlink" href="#container-classes" title="Permalink to this headline">¶</a></h3>
+<p>The container classes implement required private member variable interfaces as defined by the <tt class="docutils literal"><span class="pre">Table</span></tt> abstract base class. Specifically, these objects define the ways in which data is moved into and out of the contained data object. These are fully functional and usable objects, however they do not implement table type specifc functionality.</p>
+<div class="section" id="sparsetable">
+<h4><tt class="docutils literal"><span class="pre">SparseTable</span></tt><a class="headerlink" href="#sparsetable" title="Permalink to this headline">¶</a></h4>
+<p>The subclass <tt class="docutils literal"><span class="pre">SparseTable</span></tt> can be derived for use with table data. This object implemented all of the required private interfaces specified by the <tt class="docutils literal"><span class="pre">Table</span></tt> base class. The object contains a <tt class="docutils literal"><span class="pre">_data</span></tt> private member variable that is an instance of <tt class="docutils literal"><span class="pre">biom.table.SparseDict</span></tt>. It is advised to used derived objects of SparseTable if the data being operated on is sparse.</p>
+</div>
+<div class="section" id="densetable">
+<h4><tt class="docutils literal"><span class="pre">DenseTable</span></tt><a class="headerlink" href="#densetable" title="Permalink to this headline">¶</a></h4>
+<p>The <tt class="docutils literal"><span class="pre">DenseTable</span></tt> object fulfills all private member methods stubbed out by the <tt class="docutils literal"><span class="pre">Table</span></tt> base class. The dense table contains a private member variable that is an instance of <tt class="docutils literal"><span class="pre">numpy.array</span></tt>. The <tt class="docutils literal"><span class="pre">array</span></tt> object is a matrix that contains all values including zeros. It is advised to use this table only if the number of samples and observations is reasonble. Unfortunately, it isn&#8217;t reasonable to define reasonable in this context. However, if either the number of observations or the number of samples is &gt; 1000, it would probably be a good idea to rely on a <tt class="docutils literal"><span class="pre">SparseTable</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="table-type-objects">
+<h3>Table type objects<a class="headerlink" href="#table-type-objects" title="Permalink to this headline">¶</a></h3>
+<p>The table type objects define variables and methods specific to a table type. Under the majority of situations, these are the objects that should be instantiated.</p>
+<div class="section" id="denseotutable">
+<h4><tt class="docutils literal"><span class="pre">DenseOTUTable</span></tt><a class="headerlink" href="#denseotutable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="sparseotutable">
+<h4><tt class="docutils literal"><span class="pre">SparseOTUTable</span></tt><a class="headerlink" href="#sparseotutable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="densepathwaytable">
+<h4><tt class="docutils literal"><span class="pre">DensePathwayTable</span></tt><a class="headerlink" href="#densepathwaytable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="sparsepathwaytable">
+<h4><tt class="docutils literal"><span class="pre">SparsePathwayTable</span></tt><a class="headerlink" href="#sparsepathwaytable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="densefunctiontable">
+<h4><tt class="docutils literal"><span class="pre">DenseFunctionTable</span></tt><a class="headerlink" href="#densefunctiontable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="sparsefunctionable">
+<h4><tt class="docutils literal"><span class="pre">SparseFunctionable</span></tt><a class="headerlink" href="#sparsefunctionable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="denseorthologtable">
+<h4><tt class="docutils literal"><span class="pre">DenseOrthologTable</span></tt><a class="headerlink" href="#denseorthologtable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="sparseorthologtable">
+<h4><tt class="docutils literal"><span class="pre">SparseOrthologTable</span></tt><a class="headerlink" href="#sparseorthologtable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="densegenetable">
+<h4><tt class="docutils literal"><span class="pre">DenseGeneTable</span></tt><a class="headerlink" href="#densegenetable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="sparsegenetable">
+<h4><tt class="docutils literal"><span class="pre">SparseGeneTable</span></tt><a class="headerlink" href="#sparsegenetable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="densemetabolitetable">
+<h4><tt class="docutils literal"><span class="pre">DenseMetaboliteTable</span></tt><a class="headerlink" href="#densemetabolitetable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="sparsemetabolitetable">
+<h4><tt class="docutils literal"><span class="pre">SparseMetaboliteTable</span></tt><a class="headerlink" href="#sparsemetabolitetable" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="biom_format.html">The biom file format</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+
+    <div class="footer">
+        &copy; Copyright 2012, The BIOM Project.
+      Last updated on Apr 11, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-6636235-6']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>
