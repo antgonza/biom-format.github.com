@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.9.1-dev',
+        VERSION:     '0.9.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -41,7 +41,7 @@
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="table_objects.html">biom-format <tt class="docutils literal"><span class="pre">Table</span></tt> objects</a>&#160;&#160;»
+        <a href="table_objects.html">biom-format <tt class="docutils literal docutils literal"><span class="pre">Table</span></tt> objects</a>&#160;&#160;»
         </p>
 
       </div>
@@ -324,38 +324,9 @@ metadata            : &lt;an object or null&gt; A object containing key, value m
 </div>
 </div>
 </div>
-<div class="section" id="converting-between-file-formats">
-<span id="converting"></span><h2>Converting between file formats<a class="headerlink" href="#converting-between-file-formats" title="Permalink to this headline">¶</a></h2>
-<dl class="docutils">
-<dt>The <tt class="docutils literal"><span class="pre">convert_biom.py</span></tt> script in the biom-format project can be used to convert between biom and tab-delimited table formats. This is useful for several reasons:</dt>
-<dd><ul class="first last simple">
-<li>converting biom format to classic OTU tables for easy viewing in programs such as Excel</li>
-<li>converting between sparse and dense biom formats</li>
-</ul>
-</dd>
-</dl>
-<div class="section" id="usage-examples">
-<h3>Usage examples<a class="headerlink" href="#usage-examples" title="Permalink to this headline">¶</a></h3>
-<p>Convert a tab-delimited table to sparse biom format:</p>
-<div class="highlight-python"><pre>convert_biom.py -i otu_table.txt -o otu_table.biom --biom_table_type="otu table"</pre>
-</div>
-<p>Convert a tab-delimited table to dense biom format:</p>
-<div class="highlight-python"><pre>convert_biom.py -i otu_table.txt -o otu_table.biom --biom_table_type="otu table" --biom_type=dense</pre>
-</div>
-<p>Convert biom format to tab-delimited table format:</p>
-<div class="highlight-python"><pre>convert_biom.py -i otu_table.biom -o otu_table.txt -b</pre>
-</div>
-<p>Convert dense biom format to sparse biom format:</p>
-<div class="highlight-python"><pre>convert_biom.py -i otu_table.dense.biom -o otu_table.sparse.biom --dense_biom_to_sparse_biom</pre>
-</div>
-<p>Convert sparse biom format to dense biom format:</p>
-<div class="highlight-python"><pre>convert_biom.py -i otu_table.sparse.biom -o otu_table.dense.biom --sparse_biom_to_dense_biom</pre>
-</div>
-</div>
-</div>
 <div class="section" id="should-i-generate-sparse-or-dense-biom-files">
 <span id="sparse-or-dense"></span><h2>Should I generate sparse or dense biom files?<a class="headerlink" href="#should-i-generate-sparse-or-dense-biom-files" title="Permalink to this headline">¶</a></h2>
-<p>In general, we recommend using the sparse format for your biom files. These will be a lot smaller than the dense format biom files when your data is sparse (i.e., more than 85% of your counts are zero). This is common for OTU tables and metagenome tables, and you&#8217;ll want to investigate whether it&#8217;s true for your data. If you currently format your data in tab-separated tables where observations are rows and samples are columns, you can format that file to be convertible to biom format with the <tt class="docutils literal"><span class="pre">convert_biom.py</span></tt>. Here you can create dense and sparse formats, and see which file size is smaller. See the section on <a class="reference internal" href="#converting"><em>Converting between file formats</em></a>.</p>
+<p>In general, we recommend using the sparse format for your biom files. These will be a lot smaller than the dense format biom files when your data is sparse (i.e., more than 85% of your counts are zero). This is common for OTU tables and metagenome tables, and you&#8217;ll want to investigate whether it&#8217;s true for your data. If you currently format your data in tab-separated tables where observations are rows and samples are columns, you can format that file to be convertible to biom format with the <tt class="docutils literal"><span class="pre">convert_biom.py</span></tt>. Here you can create dense and sparse formats, and see which file size is smaller. See the section on <a class="reference internal" href="biom_conversion.html#converting"><em>Converting between file formats</em></a>.</p>
 </div>
 <div class="section" id="motivation-for-the-biom-format">
 <h2>Motivation for the BIOM format<a class="headerlink" href="#motivation-for-the-biom-format" title="Permalink to this headline">¶</a></h2>
@@ -404,7 +375,7 @@ PC.356 OTU3 3</pre>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="table_objects.html">biom-format <tt class="docutils literal"><span class="pre">Table</span></tt> objects</a>&#160;&#160;»
+        <a href="table_objects.html">biom-format <tt class="docutils literal docutils literal"><span class="pre">Table</span></tt> objects</a>&#160;&#160;»
         </p>
 
       </div>
@@ -412,7 +383,7 @@ PC.356 OTU3 3</pre>
 
     <div class="footer">
         &copy; Copyright 2012, The BIOM Project.
-      Last updated on Apr 11, 2012.
+      Last updated on May 01, 2012.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
 <script type="text/javascript">
