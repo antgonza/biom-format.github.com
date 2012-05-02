@@ -91,10 +91,15 @@
 <p>To install the release version, download from <a class="reference external" href="https://github.com/downloads/biom-format/biom-format/biom-format-0.9.3.tgz">biom-format-0.9.3</a>, and then run <tt class="docutils literal"><span class="pre">tar</span> <span class="pre">-xvzf</span></tt> on the resulting file to unzip it. To install the development version, run the following command:</p>
 <div class="highlight-python"><pre>git clone git://github.com/biom-format/biom-format.git</pre>
 </div>
-<p>To install (either the development or release version), follow these steps:</p>
+<p>To install the development version, follow these steps:</p>
 <div class="highlight-python"><pre>cd $HOME/code/biom-format
 sudo python setup.py install</pre>
 </div>
+<p>To install the release version, follow these steps:</p>
+<div class="highlight-python"><pre>cd $HOME/code/biom-format-0.9.3
+sudo python setup.py install</pre>
+</div>
+
 <p>You should then have access to the biom-format project. You can test this by running the following command:</p>
 <div class="highlight-python"><pre>python -c "from biom import __version__; print __version__"</pre>
 </div>
