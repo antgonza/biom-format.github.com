@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.9.3',
+        VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -48,7 +48,7 @@
 <h1>The Biological Observation Matrix (BIOM) format<a class="headerlink" href="#the-biological-observation-matrix-biom-format" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference external" href="http://www.biom-format.org">BIOM file format</a> (canonically pronounced <cite>biome</cite>) is designed to be a general-use format for representing biological sample by observation contingency tables. BIOM is a recognized standard for the <a class="reference external" href="http://www.earthmicrobiome.org">Earth Microbiome Project</a> and is a <a class="reference external" href="http://gensc.org/">Genomics Standards Consortium</a> candidate project.</p>
 <p>The <a class="reference external" href="http://www.biom-format.org">BIOM format</a> is designed for general use in broad areas of comparative -omics. For example, in marker-gene surveys, the primary use of this format is to represent OTU tables: the observations in this case are OTUs and the matrix contains counts corresponding to the number of times each OTU is observed in each sample. With respect to metagenome data, this format would be used to represent metagenome tables: the observations in this case might correspond to SEED subsystems, and the matrix would contain counts corresponding to the number of times each subsystem is observed in each metagenome. Similarly, with respect to genome data, this format may be used to represent a set of genomes: the observations in this case again might correspond to SEED subsystems, and the counts would correspond to the number of times each subsystem is observed in each genome.</p>
-<p>There are two components to the BIOM project: first is <a class="reference external" href="./documentation/biom_format.html">definition of the BIOM format</a>, and second is <a class="reference external" href="./documentation/table_objects.html">development of support objects</a> in multiple programming languages to support the use of BIOM in diverse bioinformatics applications. A 1.0.0 release of the biom-format project will coincide with publication of a manuscript describing the project.</p>
+<p>There are two components to the BIOM project: first is <a class="reference external" href="./documentation/biom_format.html">definition of the BIOM format</a>, and second is <a class="reference external" href="./documentation/table_objects.html">development of support objects</a> in multiple programming languages to support the use of BIOM in diverse bioinformatics applications. The version of the BIOM file format is independent of the version of the <cite>biom-format</cite> software.</p>
 </div>
 <div class="section" id="contents">
 <h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
@@ -56,7 +56,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="documentation/index.html">BIOM Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="documentation/biom_format.html">The biom file format</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="documentation/biom_format.html#example-biom-files">Example biom files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation/format_versions/biom-1.0.html">The biom file format: Version 1.0</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documentation/biom_format.html#tips-and-faqs-regarding-the-biom-file-format">Tips and FAQs regarding the BIOM file format</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="documentation/biom_format.html#should-i-generate-sparse-or-dense-biom-files">Should I generate sparse or dense biom files?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation/biom_format.html#motivation-for-the-biom-format">Motivation for the BIOM format</a></li>
 <li class="toctree-l3"><a class="reference internal" href="documentation/biom_format.html#file-extension">File extension</a></li>
@@ -79,27 +82,43 @@
 </div>
 <div class="section" id="biom-version">
 <h1>BIOM version<a class="headerlink" href="#biom-version" title="Permalink to this headline">¶</a></h1>
-<p>The latest official version of the biom-format project and file format is 0.9.3.</p>
-<p>The biom-format project and file format version are currently the same, but these will be decoupled with the 1.0.0 release. Release versions contain three integers in the following format: <tt class="docutils literal"><span class="pre">major-version.incremental-version.minor-version</span></tt>. When <tt class="docutils literal"><span class="pre">-dev</span></tt> is appended to the end of a version string that indicates a development (or between-release version). For example, <tt class="docutils literal"><span class="pre">1.0.0-dev</span></tt> would refer to the development version following the 1.0.0 release.</p>
+<p>The latest official version of the biom-format project is 1.0.0 and of the BIOM file format is 1.0. Details on the file format can be found <a class="reference external" href="./documentation/biom_format.html">here</a>.</p>
 </div>
-<div class="section" id="installing-the-biom-project">
-<h1>Installing the BIOM project<a class="headerlink" href="#installing-the-biom-project" title="Permalink to this headline">¶</a></h1>
-<p>To install the BIOM project, you can download the release version <a class="reference external" href="https://github.com/downloads/biom-format/biom-format/biom-format-0.9.3.tgz">biom-format-0.9.3</a>, or work with the development version. Generally we recommend working with the release version as it will be more stable, but if you want access to the latest features (and can tolerate some instability) you should work with the development version.</p>
-<p>To pull the development version from our svn repository, first <tt class="docutils literal"><span class="pre">cd</span></tt> to the directory where you&#8217;d like to install the code. We&#8217;ll call this <tt class="docutils literal"><span class="pre">$HOME/code</span></tt>:</p>
+<div class="section" id="installing-the-biom-format-project">
+<h1>Installing the biom-format project<a class="headerlink" href="#installing-the-biom-format-project" title="Permalink to this headline">¶</a></h1>
+<p>To install the <tt class="docutils literal"><span class="pre">biom-format</span></tt> project, you can download the release version <a class="reference external" href="https://github.com/downloads/biom-format/biom-format/biom-format-1.0.0.tgz">biom-format-1.0.0</a>, or work with the development version. Generally we recommend working with the release version as it will be more stable, but if you want access to the latest features (and can tolerate some instability) you should work with the development version.</p>
+<dl class="docutils">
+<dt>The biom-format project has the following dependencies:</dt>
+<dd><ul class="first last simple">
+<li>Python 2 (2.6 or later)</li>
+<li>numpy (1.3.0 or later)</li>
+<li>gcc &gt;= 4.1.2 (optional; used for more efficient sparse table representations)</li>
+<li>cython &gt;= 0.14.1 (optional; used for more efficient sparse table representations)</li>
+</ul>
+</dd>
+</dl>
+<p>We&#8217;ll illustrate the install process in the <tt class="docutils literal"><span class="pre">$HOME/code</span></tt> directory. You can either work in this directory on your system (creating it, if necessary, by running <tt class="docutils literal"><span class="pre">mkdir</span> <span class="pre">$HOME/code</span></tt>) or replace all occurrences of <tt class="docutils literal"><span class="pre">$HOME/code</span></tt> in the following instructions with your working directory. Change to this directory to start the install process:</p>
 <div class="highlight-python"><pre>cd $HOME/code</pre>
 </div>
-<p>To install the release version, download from <a class="reference external" href="https://github.com/downloads/biom-format/biom-format/biom-format-0.9.3.tgz">biom-format-0.9.3</a>, and then run <tt class="docutils literal"><span class="pre">tar</span> <span class="pre">-xvzf</span></tt> on the resulting file to unzip it. To install the development version, run the following command:</p>
-<div class="highlight-python"><pre>git clone git://github.com/biom-format/biom-format.git</pre>
+<p>To install the release version, download from <a class="reference external" href="https://github.com/downloads/biom-format/biom-format/biom-format-1.0.0.tgz">biom-format-1.0.0</a>, uncompress the file, and change to the resulting directory:</p>
+<div class="highlight-python"><pre>wget https://github.com/downloads/biom-format/biom-format/biom-format-1.0.0.tgz
+tar -xvzf biom-format-1.0.0.tgz
+cd $HOME/code/biom-format-1.0.0</pre>
 </div>
-<p>To install the development version, follow these steps:</p>
-<div class="highlight-python"><pre>cd $HOME/code/biom-format
-sudo python setup.py install</pre>
+<p>Alternatively, to install the development version, pull it from github, and change to the resulting directory:</p>
+<div class="highlight-python"><pre>git clone git://github.com/biom-format/biom-format.git
+cd $HOME/code/biom-format</pre>
 </div>
-<p>To install the release version, follow these steps:</p>
-<div class="highlight-python"><pre>cd $HOME/code/biom-format-0.9.3
-sudo python setup.py install</pre>
+<p>To install (either the development or release version), follow these steps:</p>
+<div class="highlight-python"><pre>sudo python setup.py install</pre>
 </div>
-
+<p>If you do not have sudo access on your system (or don&#8217;t want to install the <tt class="docutils literal"><span class="pre">biom-format</span></tt> project in the default location) you&#8217;ll need to install the library code and scripts in specified directories, and then tell your system where to look for those files. You can do this as follows:</p>
+<div class="highlight-python"><pre>echo "export PATH=$HOME/bin/:$PATH" &gt;&gt; $HOME/.bashrc
+echo "export PYTHONPATH=$HOME/lib/:$PYTHONPATH" &gt;&gt; $HOME/.bashrc
+mkdir -p $HOME/bin $HOME/lib/
+source $HOME/.bashrc
+python setup.py install --install-scripts=$HOME/bin/ --install-purelib=$HOME/lib/ --install-lib=$HOME/lib/</pre>
+</div>
 <p>You should then have access to the biom-format project. You can test this by running the following command:</p>
 <div class="highlight-python"><pre>python -c "from biom import __version__; print __version__"</pre>
 </div>
@@ -107,11 +126,16 @@ sudo python setup.py install</pre>
 <p>Next you can run:</p>
 <div class="highlight-python"><pre>which convert_biom.py</pre>
 </div>
-<p>You should get the full path to <tt class="docutils literal"><span class="pre">convert_biom.py</span></tt> printed to your screen if it is installed correctly.</p>
+<p>You should get a file path ending with <tt class="docutils literal"><span class="pre">convert_biom.py</span></tt> printed to your screen if it is installed correctly.</p>
 </div>
 <div class="section" id="citing-the-biom-project">
 <h1>Citing the BIOM project<a class="headerlink" href="#citing-the-biom-project" title="Permalink to this headline">¶</a></h1>
-<p>While our manuscript is under review you can cite the BIOM project with this URL: <a class="reference external" href="http://www.biom-format.org">http://www.biom-format.org</a>.</p>
+<p>You can cite the BIOM format as follows:</p>
+<div class="line-block">
+<div class="line">The Biological Observation Matrix (BIOM) format or: how I learned to stop worrying and love the ome-ome.</div>
+<div class="line">Daniel McDonald, Jose C. Clemente, Justin Kuczynski, Jai Ram Rideout, Jesse Stombaugh, Doug Wendel, Andreas Wilke, Susan Huse, John Hufnagle, Folker Meyer, Rob Knight, and J. Gregory Caporaso.</div>
+<div class="line">GigaScience, June 2012.</div>
+</div>
 </div>
 <div class="section" id="development-team">
 <h1>Development team<a class="headerlink" href="#development-team" title="Permalink to this headline">¶</a></h1>
@@ -133,7 +157,7 @@ sudo python setup.py install</pre>
 
     <div class="footer">
         &copy; Copyright 2012, The BIOM Project.
-      Last updated on May 01, 2012.
+      Last updated on May 31, 2012.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
 <script type="text/javascript">

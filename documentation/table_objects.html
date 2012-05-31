@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.9.3',
+        VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="top" title="biom-format.org" href="../index.html" />
     <link rel="up" title="BIOM Documentation" href="index.html" />
     <link rel="next" title="Converting between file formats" href="biom_conversion.html" />
-    <link rel="prev" title="The biom file format" href="biom_format.html" /> 
+    <link rel="prev" title="The biom file format: Version 1.0" href="format_versions/biom-1.0.html" /> 
   </head>
   <body>
       <div class="header"><h1 class="heading"><a href="../index.html">
@@ -37,7 +37,7 @@
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="biom_format.html">The biom file format</a>
+        «&#160;&#160;<a href="format_versions/biom-1.0.html">The biom file format: Version 1.0</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
@@ -50,7 +50,7 @@
         
   <div class="section" id="biom-format-table-objects">
 <span id="table-objects"></span><h1>biom-format <tt class="docutils literal"><span class="pre">Table</span></tt> objects<a class="headerlink" href="#biom-format-table-objects" title="Permalink to this headline">¶</a></h1>
-<p>The biom-format project provides rich <tt class="docutils literal"><span class="pre">Table</span></tt> objects to support use of the BIOM file format. The objects encapsulate matrix data (such as OTU counts) and abstract the interaction away from the programmer. This provides the immediate benefit of the programmer not having to worry about what the underlying data object is, and in turn allows for different data representations to be supported. Currently, biom-format supports a <tt class="docutils literal"><span class="pre">dense</span></tt> object built off of <tt class="docutils literal"><span class="pre">numpy.array</span></tt> (<a class="reference external" href="http://http://numpy.scipy.org/">NumPy</a>) and a <tt class="docutils literal"><span class="pre">sparse</span></tt> object built off of Python dictionaries.</p>
+<p>The biom-format project provides rich <tt class="docutils literal"><span class="pre">Table</span></tt> objects to support use of the BIOM file format. The objects encapsulate matrix data (such as OTU counts) and abstract the interaction away from the programmer. This provides the immediate benefit of the programmer not having to worry about what the underlying data object is, and in turn allows for different data representations to be supported. Currently, biom-format supports a <tt class="docutils literal"><span class="pre">dense</span></tt> object built off of <tt class="docutils literal"><span class="pre">numpy.array</span></tt> (<a class="reference external" href="http://numpy.scipy.org/">NumPy</a>) and a <tt class="docutils literal"><span class="pre">sparse</span></tt> object built off of Python dictionaries.</p>
 <div class="section" id="biom-format-table-factory-method">
 <h2>biom-format <tt class="docutils literal"><span class="pre">table_factory</span></tt> method<a class="headerlink" href="#biom-format-table-factory-method" title="Permalink to this headline">¶</a></h2>
 <p>Generally, construction of a <tt class="docutils literal"><span class="pre">Table</span></tt> subclass will be through the <tt class="docutils literal"><span class="pre">table_factory</span></tt> method. This method facilitates any necessary data conversions and supports a wide variety of input data types.</p>
@@ -64,13 +64,40 @@ various means of juggling. Data can be:</p>
 <div><ul class="simple">
 <li>numpy.array</li>
 <li>list of numpy.array vectors</li>
-<li>SparseDict representation</li>
+<li>SparseObj representation</li>
 <li>dict representation</li>
-<li>list of SparseDict representation vectors</li>
+<li>list of SparseObj representation vectors</li>
 <li>list of lists of sparse values [[row, col, value], ...]</li>
 <li>list of lists of dense values [[value, value, ...], ...]</li>
 </ul>
 </div></blockquote>
+<p>Example usage to create a SparseOTUTable object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">biom.table</span> <span class="kn">import</span> <span class="n">table_factory</span><span class="p">,</span> <span class="n">SparseOTUTable</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+
+<span class="n">sample_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;s1&#39;</span><span class="p">,</span><span class="s">&#39;s2&#39;</span><span class="p">,</span><span class="s">&#39;s3&#39;</span><span class="p">,</span><span class="s">&#39;s4&#39;</span><span class="p">]</span>
+<span class="n">sample_md</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;pH&#39;</span><span class="p">:</span><span class="mf">4.2</span><span class="p">,</span><span class="s">&#39;country&#39;</span><span class="p">:</span><span class="s">&#39;Peru&#39;</span><span class="p">},</span>
+             <span class="p">{</span><span class="s">&#39;pH&#39;</span><span class="p">:</span><span class="mf">5.2</span><span class="p">,</span><span class="s">&#39;country&#39;</span><span class="p">:</span><span class="s">&#39;Peru&#39;</span><span class="p">},</span>
+             <span class="p">{</span><span class="s">&#39;pH&#39;</span><span class="p">:</span><span class="mf">5.0</span><span class="p">,</span><span class="s">&#39;country&#39;</span><span class="p">:</span><span class="s">&#39;Peru&#39;</span><span class="p">},</span>
+             <span class="p">{</span><span class="s">&#39;pH&#39;</span><span class="p">:</span><span class="mf">4.9</span><span class="p">,</span><span class="s">&#39;country&#39;</span><span class="p">:</span><span class="s">&#39;Peru&#39;</span><span class="p">}]</span>
+
+<span class="n">observation_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;o1&#39;</span><span class="p">,</span><span class="s">&#39;o2&#39;</span><span class="p">,</span><span class="s">&#39;o3&#39;</span><span class="p">]</span>
+<span class="n">observation_md</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;domain&#39;</span><span class="p">:</span><span class="s">&#39;Archaea&#39;</span><span class="p">},</span>
+                  <span class="p">{</span><span class="s">&#39;domain&#39;</span><span class="p">:</span><span class="s">&#39;Bacteria&#39;</span><span class="p">},</span>
+                  <span class="p">{</span><span class="s">&#39;domain&#39;</span><span class="p">:</span><span class="s">&#39;Bacteria&#39;</span><span class="p">}]</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+              <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">]])</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">table_factory</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+                  <span class="n">sample_ids</span><span class="p">,</span>
+                  <span class="n">observation_ids</span><span class="p">,</span>
+                  <span class="n">sample_md</span><span class="p">,</span>
+                  <span class="n">observation_md</span><span class="p">,</span>
+                  <span class="n">constructor</span><span class="o">=</span><span class="n">SparseOTUTable</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -91,101 +118,113 @@ various means of juggling. Data can be:</p>
 <dt id="biom.table.Table.addObservationMetadata">
 <tt class="descname">addObservationMetadata</tt><big>(</big><em>md</em><big>)</big><a class="headerlink" href="#biom.table.Table.addObservationMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a dict of metadata and add it to an observation.</p>
-<p>{observation_id:{dict_of_metadata}}</p>
+<p><tt class="docutils literal"><span class="pre">md</span></tt> should be of the form <tt class="docutils literal"><span class="pre">{observation_id:{dict_of_metadata}}</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.addSampleMetadata">
 <tt class="descname">addSampleMetadata</tt><big>(</big><em>md</em><big>)</big><a class="headerlink" href="#biom.table.Table.addSampleMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a dict of metadata and add it to a sample.</p>
-<p>{sample_id:{dict_of_metadata}}</p>
+<p><tt class="docutils literal"><span class="pre">md</span></tt> should be of the form <tt class="docutils literal"><span class="pre">{sample_id:{dict_of_metadata}}</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.binObservationsByMetadata">
 <tt class="descname">binObservationsByMetadata</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#biom.table.Table.binObservationsByMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields tables by metadata</p>
-<p>f is given the sample metadata by row and must return what &#8220;bin&#8221; the
-sample is part of.</p>
+<p><tt class="docutils literal"><span class="pre">f</span></tt> is given the observation metadata by row and must return what 
+&#8220;bin&#8221; the observation is part of.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.binSamplesByMetadata">
 <tt class="descname">binSamplesByMetadata</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#biom.table.Table.binSamplesByMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields tables by metadata</p>
-<p>f is given the sample metadata by row and must return what &#8220;bin&#8221; the
-sample is part of.</p>
+<p><tt class="docutils literal"><span class="pre">f</span></tt> is given the sample metadata by row and must return what &#8220;bin&#8221; 
+the sample is part of.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.collapseObservationsByMetadata">
 <tt class="descname">collapseObservationsByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseObservationsByMetadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Collapse a table by observation metadata</p>
+<dd><p>Collapse observations in a table by observation metadata</p>
 <p>Bin observations by metadata then collapse each bin into a single 
-observation. Metadata for the collapsed observations are retained and 
-can be referred to by the ObservationId from each observation within 
-the bin.</p>
+observation.</p>
+<p>Metadata for the collapsed observations are retained and 
+can be referred to by the <tt class="docutils literal"><span class="pre">ObservationId</span></tt> from each observation 
+within the bin.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.collapseSamplesByMetadata">
 <tt class="descname">collapseSamplesByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseSamplesByMetadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Collapse a table by sample metadata</p>
-<p>Bin samples by metadata then collapse each bin into a single sample.
-Metadata for the collapsed samples are retained and can be referred to
-by the SampleId from each sample within the bin.</p>
+<dd><p>Collapse samples in a table by sample metadata</p>
+<p>Bin samples by metadata then collapse each bin into a single sample.</p>
+<p>Metadata for the collapsed samples are retained and can be referred to
+by the <tt class="docutils literal"><span class="pre">SampleId</span></tt> from each sample within the bin.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.copy">
 <tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a copy of the Table</p>
+<dd><p>Returns a copy of the table</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.delimitedSelf">
 <tt class="descname">delimitedSelf</tt><big>(</big><em>delim='t'</em>, <em>header_key=None</em>, <em>header_value=None</em>, <em>metadata_formatter=&lt;type 'str'&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.delimitedSelf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stringify self in a delimited form</p>
+<dd><p>Return self as a string in a delimited form</p>
 <p>Default str output for the Table is just row/col ids and table data
 without any metadata</p>
-<p>If header_key is not None, try to pull out that key from observation
-metadata. If header_value is not None, use the header_value in the
+<p>Including observation metadata in output: If <tt class="docutils literal"><span class="pre">header_key</span></tt> is not 
+<tt class="xref docutils literal"><span class="pre">None</span></tt>, the observation metadata with that name will be included 
+in the delimited output. If <tt class="docutils literal"><span class="pre">header_value</span></tt> is also not <tt class="xref docutils literal"><span class="pre">None</span></tt>, the 
+observation metadata will use the provided <tt class="docutils literal"><span class="pre">header_value</span></tt> as the 
+observation metadata name (i.e., the column header) in the delimited 
 output.</p>
-<dl class="docutils">
-<dt>metadata_formatter: a function which takes a metadata entry and </dt>
-<dd>returns a formatted version that should be written to file</dd>
-</dl>
+<p><tt class="docutils literal"><span class="pre">metadata_formatter</span></tt>: a function which takes a metadata entry and 
+returns a formatted version that should be written to file</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.filterObservations">
 <tt class="descname">filterObservations</tt><big>(</big><em>f</em>, <em>invert=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.filterObservations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filter observations in self based on f</p>
-<p>f must accept three variables, the observation values, observation ids
-and observation metadata. The function must only return true or false.</p>
+<dd><p>Filter observations from self based on <tt class="docutils literal"><span class="pre">f</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">f</span></tt> must accept three variables, the observation values, observation
+IDs and observation metadata. The function must only return <tt class="xref docutils literal"><span class="pre">True</span></tt> or
+<tt class="xref docutils literal"><span class="pre">False</span></tt>, where <tt class="xref docutils literal"><span class="pre">True</span></tt> indicates that an observation should be
+retained.</p>
+<p>invert: if <tt class="docutils literal"><span class="pre">invert</span> <span class="pre">==</span> <span class="pre">True</span></tt>, a return value of <tt class="xref docutils literal"><span class="pre">True</span></tt> from <tt class="docutils literal"><span class="pre">f</span></tt> 
+indicates that an observation should be discarded</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.filterSamples">
 <tt class="descname">filterSamples</tt><big>(</big><em>f</em>, <em>invert=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.filterSamples" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filter samples in self based on f</p>
-<p>f must accept three variables, the sample values, sample IDs and sample 
-metadata. The function must only return true or false.</p>
+<dd><p>Filter samples from self based on <tt class="docutils literal"><span class="pre">f</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">f</span></tt> must accept three variables, the sample values, sample IDs and 
+sample metadata. The function must only return <tt class="xref docutils literal"><span class="pre">True</span></tt> or <tt class="xref docutils literal"><span class="pre">False</span></tt>, 
+where <tt class="xref docutils literal"><span class="pre">True</span></tt> indicates that a sample should be retained.</p>
+<p>invert: if <tt class="docutils literal"><span class="pre">invert</span> <span class="pre">==</span> <span class="pre">True</span></tt>, a return value of <tt class="xref docutils literal"><span class="pre">True</span></tt> from <tt class="docutils literal"><span class="pre">f</span></tt> 
+indicates that a sample should be discarded</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.getBiomFormatJsonString">
 <tt class="descname">getBiomFormatJsonString</tt><big>(</big><em>generated_by</em><big>)</big><a class="headerlink" href="#biom.table.Table.getBiomFormatJsonString" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a JSON string representing the table in Biom format.</p>
+<dd><p>Returns a JSON string representing the table in BIOM format.</p>
+<p><tt class="docutils literal"><span class="pre">generated_by</span></tt>: a string describing the software used to build the
+table</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.getBiomFormatObject">
 <tt class="descname">getBiomFormatObject</tt><big>(</big><em>generated_by</em><big>)</big><a class="headerlink" href="#biom.table.Table.getBiomFormatObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a dictionary representing the table in Biom format.</p>
+<dd><p>Returns a dictionary representing the table in BIOM format.</p>
 <p>This dictionary can then be easily converted into a JSON string for
 serialization.</p>
-<p>generated_by - a string describing the software used to build the table</p>
+<p><tt class="docutils literal"><span class="pre">generated_by</span></tt>: a string describing the software used to build the 
+table</p>
 <p>TODO: This method may be very inefficient in terms of memory usage, so
 it needs to be tested with several large tables to determine if
 optimizations are necessary or not (i.e. subclassing JSONEncoder, using
@@ -195,7 +234,9 @@ generators, etc...).</p>
 <dl class="method">
 <dt id="biom.table.Table.getBiomFormatPrettyPrint">
 <tt class="descname">getBiomFormatPrettyPrint</tt><big>(</big><em>generated_by</em><big>)</big><a class="headerlink" href="#biom.table.Table.getBiomFormatPrettyPrint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a &#8216;pretty print&#8217; format of a biom file</p>
+<dd><p>Returns a &#8216;pretty print&#8217; format of a BIOM file</p>
+<p><tt class="docutils literal"><span class="pre">generated_by</span></tt>: a string describing the software used to build the
+table</p>
 <p>WARNING: This method displays data values in a columnar format and 
 can be misleading.</p>
 </dd></dl>
@@ -203,160 +244,163 @@ can be misleading.</p>
 <dl class="method">
 <dt id="biom.table.Table.getObservationIndex">
 <tt class="descname">getObservationIndex</tt><big>(</big><em>obs_id</em><big>)</big><a class="headerlink" href="#biom.table.Table.getObservationIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the obs index</p>
+<dd><p>Returns the observation index for observation <tt class="docutils literal"><span class="pre">obs_id</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.getSampleIndex">
 <tt class="descname">getSampleIndex</tt><big>(</big><em>samp_id</em><big>)</big><a class="headerlink" href="#biom.table.Table.getSampleIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the sample index</p>
+<dd><p>Returns the sample index for sample <tt class="docutils literal"><span class="pre">samp_id</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.getValueByIds">
 <tt class="descname">getValueByIds</tt><big>(</big><em>obs_id</em>, <em>samp_id</em><big>)</big><a class="headerlink" href="#biom.table.Table.getValueByIds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the value in the matrix corresponding to (obs_id, samp_id)</p>
+<dd><p>Return value in the matrix corresponding to <tt class="docutils literal"><span class="pre">(obs_id,</span> <span class="pre">samp_id)</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.isEmpty">
 <tt class="descname">isEmpty</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.isEmpty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns true if the table is empty</p>
+<dd><p>Returns <tt class="xref docutils literal"><span class="pre">True</span></tt> if the table is empty</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.iterObservationData">
 <tt class="descname">iterObservationData</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.iterObservationData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields observation_values</p>
+<dd><p>Yields observation values</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.iterObservations">
 <tt class="descname">iterObservations</tt><big>(</big><em>conv_to_np=True</em><big>)</big><a class="headerlink" href="#biom.table.Table.iterObservations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields (observation_value, observation_id, observation_metadata)</p>
-<p>NOTE: will return None in observation_metadata positions if 
-self.ObservationMetadata is set to None</p>
+<dd><p>Yields <tt class="docutils literal"><span class="pre">(observation_value,</span> <span class="pre">observation_id,</span> <span class="pre">observation_metadata)</span></tt></p>
+<p>NOTE: will return <tt class="xref docutils literal"><span class="pre">None</span></tt> in <tt class="docutils literal"><span class="pre">observation_metadata</span></tt> positions if 
+<tt class="docutils literal"><span class="pre">self.ObservationMetadata</span></tt> is set to <tt class="xref docutils literal"><span class="pre">None</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.iterSampleData">
 <tt class="descname">iterSampleData</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.iterSampleData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields sample_values</p>
+<dd><p>Yields sample values</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.iterSamples">
 <tt class="descname">iterSamples</tt><big>(</big><em>conv_to_np=True</em><big>)</big><a class="headerlink" href="#biom.table.Table.iterSamples" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields (sample_values, sample_id, sample_metadata)</p>
-<p>NOTE: will return None in sample_metadata positions if 
-self.SampleMetadata is set to None</p>
+<dd><p>Yields <tt class="docutils literal"><span class="pre">(sample_value,</span> <span class="pre">sample_id,</span> <span class="pre">sample_metadata)</span></tt></p>
+<p>NOTE: will return <tt class="xref docutils literal"><span class="pre">None</span></tt> in <tt class="docutils literal"><span class="pre">sample_metadata</span></tt> positions if 
+<tt class="docutils literal"><span class="pre">self.SampleMetadata</span></tt> is set to <tt class="xref docutils literal"><span class="pre">None</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.merge">
-<tt class="descname">merge</tt><big>(</big><em>other</em>, <em>Sample='union'</em>, <em>Observation='union'</em>, <em>merge_f=&lt;built-in function add&gt;</em>, <em>sample_metadata_f=&lt;function prefer_self at 0x10a663488&gt;</em>, <em>observation_metadata_f=&lt;function prefer_self at 0x10a663488&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.merge" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">merge</tt><big>(</big><em>other</em>, <em>Sample='union'</em>, <em>Observation='union'</em>, <em>merge_f=&lt;built-in function add&gt;</em>, <em>sample_metadata_f=&lt;function prefer_self at 0x108b90c08&gt;</em>, <em>observation_metadata_f=&lt;function prefer_self at 0x108b90c08&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge two tables together</p>
 <p>The axes, samples and observations, can be controlled independently. 
-Both can either work on &#8216;union&#8217; or &#8216;intersection&#8217;.</p>
-<p>merge_f is a function that takes two arguments and returns a value. 
+Both can either work on <tt class="docutils literal"><span class="pre">union</span></tt> or <tt class="docutils literal"><span class="pre">intersection</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">merge_f</span></tt> is a function that takes two arguments and returns a value. 
 The method is parameterized so that values can be added or subtracted
-where there is overlap in (sample_id, observation_id) values in the 
+where there is overlap in <tt class="docutils literal"><span class="pre">(sample_id,</span> <span class="pre">observation_id)</span></tt> values in the 
 tables</p>
-<p>sample_metadata_f and observation_metadata_f define how to merge
-metadata between tables. The default is to just keep the metadata
+<p><tt class="docutils literal"><span class="pre">sample_metadata_f</span></tt> and <tt class="docutils literal"><span class="pre">observation_metadata_f</span></tt> define how to 
+merge metadata between tables. The default is to just keep the metadata
 associated to self if self has metadata otherwise take metadata from
 other. These functions are given both metadata dictsand must return 
 a single metadata dict</p>
-<p>NOTE: There is an implicit type conversion to float. Tables using
+<p>NOTE: There is an implicit type conversion to <tt class="docutils literal"><span class="pre">float</span></tt>. Tables using
 strings as the type are not supported. No check is currently in
 place.</p>
-<p>NOTE: The return type is always that of self</p>
+<p>NOTE: The return type is always that of <tt class="docutils literal"><span class="pre">self</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.nonzero">
 <tt class="descname">nonzero</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.nonzero" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns types of nonzero locations within the data matrix</p>
-<p>The values returned are (observation_id, sample_id)</p>
+<dd><p>Returns locations of nonzero locations within the data matrix</p>
+<p>The values returned are <tt class="docutils literal"><span class="pre">(observation_id,</span> <span class="pre">sample_id)</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.normObservationByMetadata">
 <tt class="descname">normObservationByMetadata</tt><big>(</big><em>obs_metadata_id</em><big>)</big><a class="headerlink" href="#biom.table.Table.normObservationByMetadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return new table with counts divided by specified metadata value</p>
+<dd><p>Return new table with vals divided by obs_metadata_id</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.normObservationBySample">
 <tt class="descname">normObservationBySample</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.normObservationBySample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return new table with relative abundance in each sample</p>
+<dd><p>Return new table with vals as relative abundances within each sample</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.normSampleByObservation">
 <tt class="descname">normSampleByObservation</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.normSampleByObservation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return new table with relative abundance in each observation</p>
+<dd><p>Return new table with vals as relative abundances within each obs</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.observationData">
 <tt class="descname">observationData</tt><big>(</big><em>id_</em><big>)</big><a class="headerlink" href="#biom.table.Table.observationData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return samples associated to a observation id</p>
+<dd><p>Return samples associated with observation id <tt class="docutils literal"><span class="pre">id_</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.observationExists">
 <tt class="descname">observationExists</tt><big>(</big><em>id_</em><big>)</big><a class="headerlink" href="#biom.table.Table.observationExists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if observation exists, False otherwise</p>
+<dd><p>Returns True if observation <tt class="docutils literal"><span class="pre">id_</span></tt> exists, False otherwise</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.reduce">
 <tt class="descname">reduce</tt><big>(</big><em>f</em>, <em>axis</em><big>)</big><a class="headerlink" href="#biom.table.Table.reduce" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reduce over axis with f</p>
-<p>axis can be either &#8216;sample&#8217; or &#8216;observation&#8217;</p>
+<p><tt class="docutils literal"><span class="pre">axis</span></tt> can be either <tt class="docutils literal"><span class="pre">sample</span></tt> or <tt class="docutils literal"><span class="pre">observation</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.sampleData">
 <tt class="descname">sampleData</tt><big>(</big><em>id_</em>, <em>conv_to_np=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.sampleData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return observations associated to a sample id</p>
+<dd><p>Return observations associated with sample id <tt class="docutils literal"><span class="pre">id_</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.sampleExists">
 <tt class="descname">sampleExists</tt><big>(</big><em>id_</em><big>)</big><a class="headerlink" href="#biom.table.Table.sampleExists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if sample exists, False otherwise</p>
+<dd><p>Returns True if sample <tt class="docutils literal"><span class="pre">id_</span></tt> exists, False otherwise</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.setValueByIds">
 <tt class="descname">setValueByIds</tt><big>(</big><em>obs_id</em>, <em>samp_id</em>, <em>val</em><big>)</big><a class="headerlink" href="#biom.table.Table.setValueByIds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the value in the matrix corresponding to (obs_id, samp_id)</p>
+<dd><p>Set matrix entry corresponding to <tt class="docutils literal"><span class="pre">(obs_id,</span> <span class="pre">samp_id)</span></tt> to <tt class="docutils literal"><span class="pre">val</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.sortByObservationId">
-<tt class="descname">sortByObservationId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x10a65fed8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortByObservationId" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a table sorted by sort_f</p>
+<tt class="descname">sortByObservationId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x108b90b90&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortByObservationId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a table where observations are sorted by <tt class="docutils literal"><span class="pre">sort_f</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">sort_f</span></tt> must take a single parameter: the list of observation 
+ids</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.sortBySampleId">
-<tt class="descname">sortBySampleId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x10a65fed8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortBySampleId" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a table sorted by sort_f</p>
+<tt class="descname">sortBySampleId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x108b90b90&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortBySampleId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a table where samples are sorted by <tt class="docutils literal"><span class="pre">sort_f</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">sort_f</span></tt> must take a single parameter: the list of sample ids</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.sortObservationOrder">
 <tt class="descname">sortObservationOrder</tt><big>(</big><em>obs_order</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortObservationOrder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new table in observation order</p>
+<dd><p>Return a new table with observations in <tt class="docutils literal"><span class="pre">observation</span> <span class="pre">order</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.sortSampleOrder">
 <tt class="descname">sortSampleOrder</tt><big>(</big><em>sample_order</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortSampleOrder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new table in sample order</p>
+<dd><p>Return a new table with samples in <tt class="docutils literal"><span class="pre">sample_order</span></tt></p>
 </dd></dl>
 
 <dl class="method">
@@ -364,23 +408,27 @@ place.</p>
 <tt class="descname">sum</tt><big>(</big><em>axis='whole'</em><big>)</big><a class="headerlink" href="#biom.table.Table.sum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the sum by axis</p>
 <p>axis can be:</p>
-<p>&#8216;whole&#8217;       : whole matrix sum
-&#8216;sample&#8217;      : return a vector with a sum for each sample
-&#8216;observation&#8217; : return a vector with a sum for each observation</p>
+<p><tt class="docutils literal"><span class="pre">whole</span></tt>       : whole matrix sum</p>
+<p><tt class="docutils literal"><span class="pre">sample</span></tt>     : return a vector with a sum for each sample</p>
+<p><tt class="docutils literal"><span class="pre">observation</span></tt> : return a vector with a sum for each observation</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.transformObservations">
 <tt class="descname">transformObservations</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#biom.table.Table.transformObservations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply a function to each observation</p>
-<p>f is passed a numpy vector and must return a vector</p>
+<dd><p>Iterate over observations, applying a function <tt class="docutils literal"><span class="pre">f</span></tt> to each value</p>
+<p><tt class="docutils literal"><span class="pre">f</span></tt> must take three values: an observation value (int or float), an 
+observation id, and an observation metadata entry, and return a single
+value (int or float) that replaces the provided observation value</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.transformSamples">
 <tt class="descname">transformSamples</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#biom.table.Table.transformSamples" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply a function to each sample</p>
-<p>f is passed a numpy vector and must return a vector</p>
+<dd><p>Iterate over samples, applying a function <tt class="docutils literal"><span class="pre">f</span></tt> to each value</p>
+<p><tt class="docutils literal"><span class="pre">f</span></tt> must take three values: a sample value (int or float), a sample 
+id, and a sample metadata entry, and return a single value (int or 
+float) that replaces the provided sample value</p>
 </dd></dl>
 
 </dd></dl>
@@ -481,7 +529,7 @@ place.</p>
 </div>
 <div class="section" id="table-type-objects">
 <h3>Table type objects<a class="headerlink" href="#table-type-objects" title="Permalink to this headline">¶</a></h3>
-<p>The table type objects define variables and methods specific to a table type. Under the majority of situations, these are the objects that should be instantiated.</p>
+<p>The table type objects define variables and methods specific to a table type. These inherit from a <tt class="docutils literal"><span class="pre">Container</span> <span class="pre">Class</span></tt> and a table type base class, and are therefore instantiable. Generally you&#8217;ll instantiate tables with <tt class="docutils literal"><span class="pre">biom.table.table_factory</span></tt>, and one of these will be passed as the <tt class="docutils literal"><span class="pre">constructor</span></tt> argument.</p>
 <div class="section" id="denseotutable">
 <h4><tt class="docutils literal"><span class="pre">DenseOTUTable</span></tt><a class="headerlink" href="#denseotutable" title="Permalink to this headline">¶</a></h4>
 <dl class="class">
@@ -599,7 +647,7 @@ place.</p>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="biom_format.html">The biom file format</a>
+        «&#160;&#160;<a href="format_versions/biom-1.0.html">The biom file format: Version 1.0</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
@@ -611,7 +659,7 @@ place.</p>
 
     <div class="footer">
         &copy; Copyright 2012, The BIOM Project.
-      Last updated on May 01, 2012.
+      Last updated on May 31, 2012.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
 <script type="text/javascript">
