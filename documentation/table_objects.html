@@ -3,18 +3,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>biom-format Table objects &mdash; biom-format.org</title>
+    
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0',
+        VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -113,7 +116,14 @@ various means of juggling. Data can be:</p>
 <dl class="class">
 <dt id="biom.table.Table">
 <em class="property">class </em><tt class="descclassname">biom.table.</tt><tt class="descname">Table</tt><big>(</big><em>Data</em>, <em>SampleIds</em>, <em>ObservationIds</em>, <em>SampleMetadata=None</em>, <em>ObservationMetadata=None</em>, <em>TableId=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#biom.table.Table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract base class for a what a Table is</p>
+<dd><p>Abstract base class representing a Table.</p>
+<p>Once created, a Table object is immutable except for its sample/observation
+metadata, which can be modified in place via addSampleMetadata and
+addObservationMetadata.</p>
+<dl class="docutils">
+<dt>Code to simulate immutability taken from here:</dt>
+<dd><a class="reference external" href="http://en.wikipedia.org/wiki/Immutable_object">http://en.wikipedia.org/wiki/Immutable_object</a></dd>
+</dl>
 <dl class="method">
 <dt id="biom.table.Table.addObservationMetadata">
 <tt class="descname">addObservationMetadata</tt><big>(</big><em>md</em><big>)</big><a class="headerlink" href="#biom.table.Table.addObservationMetadata" title="Permalink to this definition">¶</a></dt>
@@ -177,8 +187,8 @@ by the <tt class="docutils literal"><span class="pre">SampleId</span></tt> from 
 <p>Default str output for the Table is just row/col ids and table data
 without any metadata</p>
 <p>Including observation metadata in output: If <tt class="docutils literal"><span class="pre">header_key</span></tt> is not 
-<tt class="xref docutils literal"><span class="pre">None</span></tt>, the observation metadata with that name will be included 
-in the delimited output. If <tt class="docutils literal"><span class="pre">header_value</span></tt> is also not <tt class="xref docutils literal"><span class="pre">None</span></tt>, the 
+<tt class="docutils literal"><span class="pre">None</span></tt>, the observation metadata with that name will be included 
+in the delimited output. If <tt class="docutils literal"><span class="pre">header_value</span></tt> is also not <tt class="docutils literal"><span class="pre">None</span></tt>, the 
 observation metadata will use the provided <tt class="docutils literal"><span class="pre">header_value</span></tt> as the 
 observation metadata name (i.e., the column header) in the delimited 
 output.</p>
@@ -191,10 +201,10 @@ returns a formatted version that should be written to file</p>
 <tt class="descname">filterObservations</tt><big>(</big><em>f</em>, <em>invert=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.filterObservations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter observations from self based on <tt class="docutils literal"><span class="pre">f</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">f</span></tt> must accept three variables, the observation values, observation
-IDs and observation metadata. The function must only return <tt class="xref docutils literal"><span class="pre">True</span></tt> or
-<tt class="xref docutils literal"><span class="pre">False</span></tt>, where <tt class="xref docutils literal"><span class="pre">True</span></tt> indicates that an observation should be
+IDs and observation metadata. The function must only return <tt class="docutils literal"><span class="pre">True</span></tt> or
+<tt class="docutils literal"><span class="pre">False</span></tt>, where <tt class="docutils literal"><span class="pre">True</span></tt> indicates that an observation should be
 retained.</p>
-<p>invert: if <tt class="docutils literal"><span class="pre">invert</span> <span class="pre">==</span> <span class="pre">True</span></tt>, a return value of <tt class="xref docutils literal"><span class="pre">True</span></tt> from <tt class="docutils literal"><span class="pre">f</span></tt> 
+<p>invert: if <tt class="docutils literal"><span class="pre">invert</span> <span class="pre">==</span> <span class="pre">True</span></tt>, a return value of <tt class="docutils literal"><span class="pre">True</span></tt> from <tt class="docutils literal"><span class="pre">f</span></tt> 
 indicates that an observation should be discarded</p>
 </dd></dl>
 
@@ -203,18 +213,20 @@ indicates that an observation should be discarded</p>
 <tt class="descname">filterSamples</tt><big>(</big><em>f</em>, <em>invert=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.filterSamples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter samples from self based on <tt class="docutils literal"><span class="pre">f</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">f</span></tt> must accept three variables, the sample values, sample IDs and 
-sample metadata. The function must only return <tt class="xref docutils literal"><span class="pre">True</span></tt> or <tt class="xref docutils literal"><span class="pre">False</span></tt>, 
-where <tt class="xref docutils literal"><span class="pre">True</span></tt> indicates that a sample should be retained.</p>
-<p>invert: if <tt class="docutils literal"><span class="pre">invert</span> <span class="pre">==</span> <span class="pre">True</span></tt>, a return value of <tt class="xref docutils literal"><span class="pre">True</span></tt> from <tt class="docutils literal"><span class="pre">f</span></tt> 
+sample metadata. The function must only return <tt class="docutils literal"><span class="pre">True</span></tt> or <tt class="docutils literal"><span class="pre">False</span></tt>, 
+where <tt class="docutils literal"><span class="pre">True</span></tt> indicates that a sample should be retained.</p>
+<p>invert: if <tt class="docutils literal"><span class="pre">invert</span> <span class="pre">==</span> <span class="pre">True</span></tt>, a return value of <tt class="docutils literal"><span class="pre">True</span></tt> from <tt class="docutils literal"><span class="pre">f</span></tt> 
 indicates that a sample should be discarded</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.getBiomFormatJsonString">
-<tt class="descname">getBiomFormatJsonString</tt><big>(</big><em>generated_by</em><big>)</big><a class="headerlink" href="#biom.table.Table.getBiomFormatJsonString" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">getBiomFormatJsonString</tt><big>(</big><em>generated_by</em>, <em>direct_io=None</em><big>)</big><a class="headerlink" href="#biom.table.Table.getBiomFormatJsonString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a JSON string representing the table in BIOM format.</p>
 <p><tt class="docutils literal"><span class="pre">generated_by</span></tt>: a string describing the software used to build the
 table</p>
+<p>If direct_io is not None, the final output is written directly to
+direct_io during processing.</p>
 </dd></dl>
 
 <dl class="method">
@@ -254,6 +266,12 @@ can be misleading.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="biom.table.Table.getTableDensity">
+<tt class="descname">getTableDensity</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.getTableDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defined by subclass</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="biom.table.Table.getValueByIds">
 <tt class="descname">getValueByIds</tt><big>(</big><em>obs_id</em>, <em>samp_id</em><big>)</big><a class="headerlink" href="#biom.table.Table.getValueByIds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return value in the matrix corresponding to <tt class="docutils literal"><span class="pre">(obs_id,</span> <span class="pre">samp_id)</span></tt></p>
@@ -262,7 +280,7 @@ can be misleading.</p>
 <dl class="method">
 <dt id="biom.table.Table.isEmpty">
 <tt class="descname">isEmpty</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.isEmpty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns <tt class="xref docutils literal"><span class="pre">True</span></tt> if the table is empty</p>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">True</span></tt> if the table is empty</p>
 </dd></dl>
 
 <dl class="method">
@@ -275,8 +293,8 @@ can be misleading.</p>
 <dt id="biom.table.Table.iterObservations">
 <tt class="descname">iterObservations</tt><big>(</big><em>conv_to_np=True</em><big>)</big><a class="headerlink" href="#biom.table.Table.iterObservations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields <tt class="docutils literal"><span class="pre">(observation_value,</span> <span class="pre">observation_id,</span> <span class="pre">observation_metadata)</span></tt></p>
-<p>NOTE: will return <tt class="xref docutils literal"><span class="pre">None</span></tt> in <tt class="docutils literal"><span class="pre">observation_metadata</span></tt> positions if 
-<tt class="docutils literal"><span class="pre">self.ObservationMetadata</span></tt> is set to <tt class="xref docutils literal"><span class="pre">None</span></tt></p>
+<p>NOTE: will return <tt class="docutils literal"><span class="pre">None</span></tt> in <tt class="docutils literal"><span class="pre">observation_metadata</span></tt> positions if 
+<tt class="docutils literal"><span class="pre">self.ObservationMetadata</span></tt> is set to <tt class="docutils literal"><span class="pre">None</span></tt></p>
 </dd></dl>
 
 <dl class="method">
@@ -289,20 +307,16 @@ can be misleading.</p>
 <dt id="biom.table.Table.iterSamples">
 <tt class="descname">iterSamples</tt><big>(</big><em>conv_to_np=True</em><big>)</big><a class="headerlink" href="#biom.table.Table.iterSamples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields <tt class="docutils literal"><span class="pre">(sample_value,</span> <span class="pre">sample_id,</span> <span class="pre">sample_metadata)</span></tt></p>
-<p>NOTE: will return <tt class="xref docutils literal"><span class="pre">None</span></tt> in <tt class="docutils literal"><span class="pre">sample_metadata</span></tt> positions if 
-<tt class="docutils literal"><span class="pre">self.SampleMetadata</span></tt> is set to <tt class="xref docutils literal"><span class="pre">None</span></tt></p>
+<p>NOTE: will return <tt class="docutils literal"><span class="pre">None</span></tt> in <tt class="docutils literal"><span class="pre">sample_metadata</span></tt> positions if 
+<tt class="docutils literal"><span class="pre">self.SampleMetadata</span></tt> is set to <tt class="docutils literal"><span class="pre">None</span></tt></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.merge">
-<tt class="descname">merge</tt><big>(</big><em>other</em>, <em>Sample='union'</em>, <em>Observation='union'</em>, <em>merge_f=&lt;built-in function add&gt;</em>, <em>sample_metadata_f=&lt;function prefer_self at 0x108b90c08&gt;</em>, <em>observation_metadata_f=&lt;function prefer_self at 0x108b90c08&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.merge" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">merge</tt><big>(</big><em>other</em>, <em>Sample='union'</em>, <em>Observation='union'</em>, <em>sample_metadata_f=&lt;function prefer_self at 0x10a4731b8&gt;</em>, <em>observation_metadata_f=&lt;function prefer_self at 0x10a4731b8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge two tables together</p>
 <p>The axes, samples and observations, can be controlled independently. 
 Both can either work on <tt class="docutils literal"><span class="pre">union</span></tt> or <tt class="docutils literal"><span class="pre">intersection</span></tt>.</p>
-<p><tt class="docutils literal"><span class="pre">merge_f</span></tt> is a function that takes two arguments and returns a value. 
-The method is parameterized so that values can be added or subtracted
-where there is overlap in <tt class="docutils literal"><span class="pre">(sample_id,</span> <span class="pre">observation_id)</span></tt> values in the 
-tables</p>
 <p><tt class="docutils literal"><span class="pre">sample_metadata_f</span></tt> and <tt class="docutils literal"><span class="pre">observation_metadata_f</span></tt> define how to 
 merge metadata between tables. The default is to just keep the metadata
 associated to self if self has metadata otherwise take metadata from
@@ -317,7 +331,7 @@ place.</p>
 <dl class="method">
 <dt id="biom.table.Table.nonzero">
 <tt class="descname">nonzero</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.nonzero" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns locations of nonzero locations within the data matrix</p>
+<dd><p>Returns locations of nonzero elements within the data matrix</p>
 <p>The values returned are <tt class="docutils literal"><span class="pre">(observation_id,</span> <span class="pre">sample_id)</span></tt></p>
 </dd></dl>
 
@@ -360,7 +374,7 @@ place.</p>
 
 <dl class="method">
 <dt id="biom.table.Table.sampleData">
-<tt class="descname">sampleData</tt><big>(</big><em>id_</em>, <em>conv_to_np=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.sampleData" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sampleData</tt><big>(</big><em>id_</em><big>)</big><a class="headerlink" href="#biom.table.Table.sampleData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return observations associated with sample id <tt class="docutils literal"><span class="pre">id_</span></tt></p>
 </dd></dl>
 
@@ -371,14 +385,8 @@ place.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="biom.table.Table.setValueByIds">
-<tt class="descname">setValueByIds</tt><big>(</big><em>obs_id</em>, <em>samp_id</em>, <em>val</em><big>)</big><a class="headerlink" href="#biom.table.Table.setValueByIds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set matrix entry corresponding to <tt class="docutils literal"><span class="pre">(obs_id,</span> <span class="pre">samp_id)</span></tt> to <tt class="docutils literal"><span class="pre">val</span></tt></p>
-</dd></dl>
-
-<dl class="method">
 <dt id="biom.table.Table.sortByObservationId">
-<tt class="descname">sortByObservationId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x108b90b90&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortByObservationId" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sortByObservationId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x10a473140&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortByObservationId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a table where observations are sorted by <tt class="docutils literal"><span class="pre">sort_f</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">sort_f</span></tt> must take a single parameter: the list of observation 
 ids</p>
@@ -386,7 +394,7 @@ ids</p>
 
 <dl class="method">
 <dt id="biom.table.Table.sortBySampleId">
-<tt class="descname">sortBySampleId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x108b90b90&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortBySampleId" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sortBySampleId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x10a473140&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortBySampleId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a table where samples are sorted by <tt class="docutils literal"><span class="pre">sort_f</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">sort_f</span></tt> must take a single parameter: the list of sample ids</p>
 </dd></dl>
@@ -514,7 +522,13 @@ float) that replaces the provided sample value</p>
 <dl class="class">
 <dt id="biom.table.SparseTable">
 <em class="property">class </em><tt class="descclassname">biom.table.</tt><tt class="descname">SparseTable</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#biom.table.SparseTable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="method">
+<dt id="biom.table.SparseTable.getTableDensity">
+<tt class="descname">getTableDensity</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.SparseTable.getTableDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the fraction of nonzero elements in the table.</p>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 <div class="section" id="densetable">
@@ -523,7 +537,13 @@ float) that replaces the provided sample value</p>
 <dl class="class">
 <dt id="biom.table.DenseTable">
 <em class="property">class </em><tt class="descclassname">biom.table.</tt><tt class="descname">DenseTable</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#biom.table.DenseTable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="method">
+<dt id="biom.table.DenseTable.getTableDensity">
+<tt class="descname">getTableDensity</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.DenseTable.getTableDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the fraction of nonzero elements in the table.</p>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 </div>
@@ -659,8 +679,8 @@ float) that replaces the provided sample value</p>
 
     <div class="footer">
         &copy; Copyright 2012, The BIOM Project.
-      Last updated on May 31, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Last updated on Dec 13, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 <script type="text/javascript">
 

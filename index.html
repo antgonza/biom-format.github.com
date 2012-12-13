@@ -3,18 +3,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The Biological Observation Matrix (BIOM) format &mdash; biom-format.org</title>
+    
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0.0',
+        VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -75,18 +78,25 @@
 <li class="toctree-l3"><a class="reference internal" href="documentation/biom_conversion.html#special-case-usage-examples">Special case usage examples</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="documentation/adding_metadata.html">Adding sample and observation metadata to biom files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documentation/adding_metadata.html#id1">Adding metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation/adding_metadata.html#processing-metadata-while-adding">Processing metadata while adding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documentation/adding_metadata.html#renaming-or-naming-metadata-columns-while-adding">Renaming (or naming) metadata columns while adding</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="BIOM_LICENSE.html">BIOM License</a></li>
 </ul>
 </div>
 </div>
 <div class="section" id="biom-version">
 <h1>BIOM version<a class="headerlink" href="#biom-version" title="Permalink to this headline">¶</a></h1>
-<p>The latest official version of the biom-format project is 1.0.0 and of the BIOM file format is 1.0. Details on the file format can be found <a class="reference external" href="./documentation/biom_format.html">here</a>.</p>
+<p>The latest official version of the biom-format project is 1.1.0 and of the BIOM file format is 1.0. Details on the file format can be found <a class="reference external" href="./documentation/biom_format.html">here</a>.</p>
 </div>
 <div class="section" id="installing-the-biom-format-project">
 <h1>Installing the biom-format project<a class="headerlink" href="#installing-the-biom-format-project" title="Permalink to this headline">¶</a></h1>
-<p>To install the <tt class="docutils literal"><span class="pre">biom-format</span></tt> project, you can download the release version <a class="reference external" href="https://github.com/downloads/biom-format/biom-format/biom-format-1.0.0.tgz">biom-format-1.0.0</a>, or work with the development version. Generally we recommend working with the release version as it will be more stable, but if you want access to the latest features (and can tolerate some instability) you should work with the development version.</p>
+<p>To install the <tt class="docutils literal"><span class="pre">biom-format</span></tt> project, you can download the release version <a class="reference external" href="ftp://thebeast.colorado.edu/pub/biom-format-releases/biom-format-1.1.0.tar.gz">biom-format-1.1.0</a>, or work with the development version. Generally we recommend working with the release version as it will be more stable, but if you want access to the latest features (and can tolerate some instability) you should work with the development version.</p>
 <dl class="docutils">
 <dt>The biom-format project has the following dependencies:</dt>
 <dd><ul class="first last simple">
@@ -100,10 +110,10 @@
 <p>We&#8217;ll illustrate the install process in the <tt class="docutils literal"><span class="pre">$HOME/code</span></tt> directory. You can either work in this directory on your system (creating it, if necessary, by running <tt class="docutils literal"><span class="pre">mkdir</span> <span class="pre">$HOME/code</span></tt>) or replace all occurrences of <tt class="docutils literal"><span class="pre">$HOME/code</span></tt> in the following instructions with your working directory. Change to this directory to start the install process:</p>
 <div class="highlight-python"><pre>cd $HOME/code</pre>
 </div>
-<p>To install the release version, download from <a class="reference external" href="https://github.com/downloads/biom-format/biom-format/biom-format-1.0.0.tgz">biom-format-1.0.0</a>, uncompress the file, and change to the resulting directory:</p>
-<div class="highlight-python"><pre>wget https://github.com/downloads/biom-format/biom-format/biom-format-1.0.0.tgz
-tar -xvzf biom-format-1.0.0.tgz
-cd $HOME/code/biom-format-1.0.0</pre>
+<p>To install the release version, download from <a class="reference external" href="ftp://thebeast.colorado.edu/pub/biom-format-releases/biom-format-1.1.0.tar.gz">biom-format-1.1.0</a>, uncompress the file, and change to the resulting directory:</p>
+<div class="highlight-python"><pre>wget ftp://thebeast.colorado.edu/pub/biom-format-releases/biom-format-1.1.0.tar.gz
+tar -xvzf biom-format-1.1.0.tar.gz
+cd $HOME/code/biom-format-1.1.0</pre>
 </div>
 <p>Alternatively, to install the development version, pull it from github, and change to the resulting directory:</p>
 <div class="highlight-python"><pre>git clone git://github.com/biom-format/biom-format.git
@@ -157,8 +167,8 @@ python setup.py install --install-scripts=$HOME/bin/ --install-purelib=$HOME/lib
 
     <div class="footer">
         &copy; Copyright 2012, The BIOM Project.
-      Last updated on May 31, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Last updated on Dec 13, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 <script type="text/javascript">
 
