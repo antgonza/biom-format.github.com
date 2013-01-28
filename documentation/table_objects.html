@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.1',
+        VERSION:     '1.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -156,22 +156,94 @@ the sample is part of.</p>
 
 <dl class="method">
 <dt id="biom.table.Table.collapseObservationsByMetadata">
-<tt class="descname">collapseObservationsByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseObservationsByMetadata" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">collapseObservationsByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em>, <em>one_to_many=False</em>, <em>one_to_many_md_key='Path'</em>, <em>strict=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseObservationsByMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collapse observations in a table by observation metadata</p>
 <p>Bin observations by metadata then collapse each bin into a single 
 observation.</p>
 <p>Metadata for the collapsed observations are retained and 
 can be referred to by the <tt class="docutils literal"><span class="pre">ObservationId</span></tt> from each observation 
 within the bin.</p>
+<p>The remainder is only relevant to setting <tt class="docutils literal"><span class="pre">one_to_many</span></tt> to True.</p>
+<p>If <tt class="docutils literal"><span class="pre">one_to_many</span></tt> is True, allow observations to fall into multiple 
+bins if the metadata describe a one-many relationship. Supplied
+functions must allow for iteration support over the metadata key and 
+must return a tuple of (path, bin) as to describe both the path in the 
+hierarchy represented and the specific bin being collapsed into. The 
+uniqueness of the bin is _not_ based on the path but by the name of the
+bin.</p>
+<p>The metadata value for the corresponding collapsed row may include more
+(or less) information about the collapsed data. For example, if 
+collapsing &#8220;KEGG Pathways&#8221;, and there are observations that span three 
+pathways A, B, and C, such that observation 1 spans A and B, 
+observation 2 spans B and C and observation 3 spans A and C, the 
+resulting table will contain three collapsed observations:</p>
+<ul class="simple">
+<li>A, containing original observation 1 and 3</li>
+<li>B, containing original observation 1 and 2</li>
+<li>C, containing original observation 2 and 3</li>
+</ul>
+<p>If a observation maps to the same bin multiple times, it will be 
+counted multiple times.</p>
+<p>If <tt class="docutils literal"><span class="pre">one_to_many_md_key</span></tt> is specified, that becomes the metadata
+key that describes the collapsed path. If a value is not specified,
+then it defaults to &#8216;Path&#8217;.</p>
+<p>If <tt class="docutils literal"><span class="pre">strict</span></tt> is specified, then all metadata pathways operated on
+must be indexable by <tt class="docutils literal"><span class="pre">metadata_f</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">norm</span></tt> are not supported together.</p>
+<p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">reduce_f</span></tt> are not supported together.</p>
+<p>A final note on space consumption. At present, the <tt class="docutils literal"><span class="pre">one_to_many</span></tt>
+functionality requires a temporary dense matrix representation. This 
+was done so as it initially seems like true support requires rapid
+<tt class="docutils literal"><span class="pre">__setitem__</span></tt> functionality on the <tt class="docutils literal"><span class="pre">SparseObj</span></tt> and at the time of
+implementation, <tt class="docutils literal"><span class="pre">CSMat</span></tt> was O(N) to the number of nonzero elements.
+This is a work around until either a better <tt class="docutils literal"><span class="pre">__setitem__</span></tt> 
+implementation is in play on <tt class="docutils literal"><span class="pre">CSMat</span></tt> or a hybrid solution that allows
+for multiple <tt class="docutils literal"><span class="pre">SparseObj</span></tt> types is used.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.collapseSamplesByMetadata">
-<tt class="descname">collapseSamplesByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseSamplesByMetadata" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">collapseSamplesByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em>, <em>one_to_many=False</em>, <em>one_to_many_md_key='Path'</em>, <em>strict=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseSamplesByMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collapse samples in a table by sample metadata</p>
 <p>Bin samples by metadata then collapse each bin into a single sample.</p>
 <p>Metadata for the collapsed samples are retained and can be referred to
 by the <tt class="docutils literal"><span class="pre">SampleId</span></tt> from each sample within the bin.</p>
+<p>The remainder is only relevant to setting <tt class="docutils literal"><span class="pre">one_to_many</span></tt> to True.</p>
+<p>If <tt class="docutils literal"><span class="pre">one_to_many</span></tt> is True, allow samples to collapse into multiple 
+bins if the metadata describe a one-many relationship. Supplied 
+functions must allow for iteration support over the metadata key and 
+must return a tuple of (path, bin) as to describe both the path in the 
+hierarchy represented and the specific bin being collapsed into. The 
+uniqueness of the bin is _not_ based on the path but by the name of the
+bin.</p>
+<p>The metadata value for the corresponding collapsed column may include 
+more (or less) information about the collapsed data. For example, if 
+collapsing &#8220;FOO&#8221;, and there are samples that span three associations A,
+B, and C, such that sample 1 spans A and B, sample 2 spans B and C and 
+sample 3 spans A and C, the resulting table will contain three 
+collapsed samples:</p>
+<ul class="simple">
+<li>A, containing original sample 1 and 3</li>
+<li>B, containing original sample 1 and 2</li>
+<li>C, containing original sample 2 and 3</li>
+</ul>
+<p>If a sample maps to the same bin multiple times, it will be 
+counted multiple times.</p>
+<p>If <tt class="docutils literal"><span class="pre">one_to_many_md_key</span></tt> is specified, that becomes the metadata
+key that describes the collapsed path. If a value is not specified,
+then it defaults to &#8216;Path&#8217;.</p>
+<p>If <tt class="docutils literal"><span class="pre">strict</span></tt> is specified, then all metadata pathways operated on
+must be indexable by <tt class="docutils literal"><span class="pre">metadata_f</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">norm</span></tt> are not supported together.</p>
+<p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">reduce_f</span></tt> are not supported together.</p>
+<p>A final note on space consumption. At present, the <tt class="docutils literal"><span class="pre">one_to_many</span></tt>
+functionality requires a temporary dense matrix representation. This 
+was done so as it initially seems like true support requires rapid
+<tt class="docutils literal"><span class="pre">__setitem__</span></tt> functionality on the <tt class="docutils literal"><span class="pre">SparseObj</span></tt> and at the time of
+implementation, <tt class="docutils literal"><span class="pre">CSMat</span></tt> was O(N) to the number of nonzero elements.
+This is a work around until either a better <tt class="docutils literal"><span class="pre">__setitem__</span></tt> 
+implementation is in play on <tt class="docutils literal"><span class="pre">CSMat</span></tt> or a hybrid solution that allows
+for multiple <tt class="docutils literal"><span class="pre">SparseObj</span></tt> types is used.</p>
 </dd></dl>
 
 <dl class="method">
@@ -313,7 +385,7 @@ can be misleading.</p>
 
 <dl class="method">
 <dt id="biom.table.Table.merge">
-<tt class="descname">merge</tt><big>(</big><em>other</em>, <em>Sample='union'</em>, <em>Observation='union'</em>, <em>sample_metadata_f=&lt;function prefer_self at 0x102285cf8&gt;</em>, <em>observation_metadata_f=&lt;function prefer_self at 0x102285cf8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.merge" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">merge</tt><big>(</big><em>other</em>, <em>Sample='union'</em>, <em>Observation='union'</em>, <em>sample_metadata_f=&lt;function prefer_self at 0x109887f50&gt;</em>, <em>observation_metadata_f=&lt;function prefer_self at 0x109887f50&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge two tables together</p>
 <p>The axes, samples and observations, can be controlled independently. 
 Both can either work on <tt class="docutils literal"><span class="pre">union</span></tt> or <tt class="docutils literal"><span class="pre">intersection</span></tt>.</p>
@@ -386,7 +458,7 @@ place.</p>
 
 <dl class="method">
 <dt id="biom.table.Table.sortByObservationId">
-<tt class="descname">sortByObservationId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x102285c80&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortByObservationId" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sortByObservationId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x109887ed8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortByObservationId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a table where observations are sorted by <tt class="docutils literal"><span class="pre">sort_f</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">sort_f</span></tt> must take a single parameter: the list of observation 
 ids</p>
@@ -394,7 +466,7 @@ ids</p>
 
 <dl class="method">
 <dt id="biom.table.Table.sortBySampleId">
-<tt class="descname">sortBySampleId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x102285c80&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortBySampleId" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sortBySampleId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x109887ed8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortBySampleId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a table where samples are sorted by <tt class="docutils literal"><span class="pre">sort_f</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">sort_f</span></tt> must take a single parameter: the list of sample ids</p>
 </dd></dl>
@@ -679,7 +751,7 @@ float) that replaces the provided sample value</p>
 
     <div class="footer">
         &copy; Copyright 2012, The BIOM Project.
-      Last updated on Dec 17, 2012.
+      Last updated on Jan 28, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 <script type="text/javascript">
