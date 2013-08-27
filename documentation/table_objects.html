@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -17,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.2',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -140,29 +138,38 @@ addObservationMetadata.</p>
 
 <dl class="method">
 <dt id="biom.table.Table.binObservationsByMetadata">
-<tt class="descname">binObservationsByMetadata</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#biom.table.Table.binObservationsByMetadata" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">binObservationsByMetadata</tt><big>(</big><em>f</em>, <em>constructor=None</em><big>)</big><a class="headerlink" href="#biom.table.Table.binObservationsByMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields tables by metadata</p>
 <p><tt class="docutils literal"><span class="pre">f</span></tt> is given the observation metadata by row and must return what 
 &#8220;bin&#8221; the observation is part of.</p>
+<p><tt class="docutils literal"><span class="pre">constructor</span></tt>: the type of binned tables to create, e.g.
+SparseTaxonTable. If None, the binned tables will be the same type as
+this table.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.binSamplesByMetadata">
-<tt class="descname">binSamplesByMetadata</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#biom.table.Table.binSamplesByMetadata" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">binSamplesByMetadata</tt><big>(</big><em>f</em>, <em>constructor=None</em><big>)</big><a class="headerlink" href="#biom.table.Table.binSamplesByMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields tables by metadata</p>
 <p><tt class="docutils literal"><span class="pre">f</span></tt> is given the sample metadata by row and must return what &#8220;bin&#8221; 
 the sample is part of.</p>
+<p><tt class="docutils literal"><span class="pre">constructor</span></tt>: the type of binned tables to create, e.g.
+SparseTaxonTable. If None, the binned tables will be the same type as
+this table.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="biom.table.Table.collapseObservationsByMetadata">
-<tt class="descname">collapseObservationsByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em>, <em>one_to_many=False</em>, <em>one_to_many_md_key='Path'</em>, <em>strict=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseObservationsByMetadata" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">collapseObservationsByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em>, <em>include_collapsed_metadata=True</em>, <em>constructor=None</em>, <em>one_to_many=False</em>, <em>one_to_many_mode='add'</em>, <em>one_to_many_md_key='Path'</em>, <em>strict=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseObservationsByMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collapse observations in a table by observation metadata</p>
 <p>Bin observations by metadata then collapse each bin into a single 
 observation.</p>
-<p>Metadata for the collapsed observations are retained and 
-can be referred to by the <tt class="docutils literal"><span class="pre">ObservationId</span></tt> from each observation 
-within the bin.</p>
+<p>If <tt class="docutils literal"><span class="pre">include_collapsed_metadata</span></tt> is True, metadata for the collapsed
+observations are retained and can be referred to by the
+<tt class="docutils literal"><span class="pre">ObservationId</span></tt> from each observation within the bin.</p>
+<p><tt class="docutils literal"><span class="pre">constructor</span></tt>: the type of collapsed table to create, e.g.
+SparseTaxonTable. If None, the collapsed table will be the same type as
+this table.</p>
 <p>The remainder is only relevant to setting <tt class="docutils literal"><span class="pre">one_to_many</span></tt> to True.</p>
 <p>If <tt class="docutils literal"><span class="pre">one_to_many</span></tt> is True, allow observations to fall into multiple 
 bins if the metadata describe a one-many relationship. Supplied
@@ -182,8 +189,15 @@ resulting table will contain three collapsed observations:</p>
 <li>B, containing original observation 1 and 2</li>
 <li>C, containing original observation 2 and 3</li>
 </ul>
-<p>If a observation maps to the same bin multiple times, it will be 
+<p>If an observation maps to the same bin multiple times, it will be
 counted multiple times.</p>
+<p>There are two supported modes for handling one-to-many relationships
+via <tt class="docutils literal"><span class="pre">one_to_many_mode</span></tt>: <tt class="docutils literal"><span class="pre">add</span></tt> and <tt class="docutils literal"><span class="pre">divide</span></tt>. <tt class="docutils literal"><span class="pre">add</span></tt> will add the
+observation counts to each bin that the observation maps to, which may
+increase the total number of counts in the output table. <tt class="docutils literal"><span class="pre">divide</span></tt>
+will divide an observation&#8217;s counts by the number of metadata that the
+observation has before adding the counts to each bin. This will not
+increase the total number of counts in the output table.</p>
 <p>If <tt class="docutils literal"><span class="pre">one_to_many_md_key</span></tt> is specified, that becomes the metadata
 key that describes the collapsed path. If a value is not specified,
 then it defaults to &#8216;Path&#8217;.</p>
@@ -191,6 +205,7 @@ then it defaults to &#8216;Path&#8217;.</p>
 must be indexable by <tt class="docutils literal"><span class="pre">metadata_f</span></tt>.</p>
 <p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">norm</span></tt> are not supported together.</p>
 <p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">reduce_f</span></tt> are not supported together.</p>
+<p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">min_group_size</span></tt> are not supported together.</p>
 <p>A final note on space consumption. At present, the <tt class="docutils literal"><span class="pre">one_to_many</span></tt>
 functionality requires a temporary dense matrix representation. This 
 was done so as it initially seems like true support requires rapid
@@ -203,11 +218,15 @@ for multiple <tt class="docutils literal"><span class="pre">SparseObj</span></tt
 
 <dl class="method">
 <dt id="biom.table.Table.collapseSamplesByMetadata">
-<tt class="descname">collapseSamplesByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em>, <em>one_to_many=False</em>, <em>one_to_many_md_key='Path'</em>, <em>strict=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseSamplesByMetadata" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">collapseSamplesByMetadata</tt><big>(</big><em>metadata_f</em>, <em>reduce_f=&lt;built-in function add&gt;</em>, <em>norm=True</em>, <em>min_group_size=2</em>, <em>include_collapsed_metadata=True</em>, <em>constructor=None</em>, <em>one_to_many=False</em>, <em>one_to_many_mode='add'</em>, <em>one_to_many_md_key='Path'</em>, <em>strict=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.collapseSamplesByMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collapse samples in a table by sample metadata</p>
 <p>Bin samples by metadata then collapse each bin into a single sample.</p>
-<p>Metadata for the collapsed samples are retained and can be referred to
-by the <tt class="docutils literal"><span class="pre">SampleId</span></tt> from each sample within the bin.</p>
+<p>If <tt class="docutils literal"><span class="pre">include_collapsed_metadata</span></tt> is True, metadata for the collapsed
+samples are retained and can be referred to by the <tt class="docutils literal"><span class="pre">SampleId</span></tt> from
+each sample within the bin.</p>
+<p><tt class="docutils literal"><span class="pre">constructor</span></tt>: the type of collapsed table to create, e.g.
+SparseTaxonTable. If None, the collapsed table will be the same type as
+this table.</p>
 <p>The remainder is only relevant to setting <tt class="docutils literal"><span class="pre">one_to_many</span></tt> to True.</p>
 <p>If <tt class="docutils literal"><span class="pre">one_to_many</span></tt> is True, allow samples to collapse into multiple 
 bins if the metadata describe a one-many relationship. Supplied 
@@ -229,6 +248,13 @@ collapsed samples:</p>
 </ul>
 <p>If a sample maps to the same bin multiple times, it will be 
 counted multiple times.</p>
+<p>There are two supported modes for handling one-to-many relationships
+via <tt class="docutils literal"><span class="pre">one_to_many_mode</span></tt>: <tt class="docutils literal"><span class="pre">add</span></tt> and <tt class="docutils literal"><span class="pre">divide</span></tt>. <tt class="docutils literal"><span class="pre">add</span></tt> will add the
+sample counts to each bin that the sample maps to, which may increase
+the total number of counts in the output table. <tt class="docutils literal"><span class="pre">divide</span></tt> will divide
+a sample&#8217;s counts by the number of metadata that the sample has before
+adding the counts to each bin. This will not increase the total number
+of counts in the output table.</p>
 <p>If <tt class="docutils literal"><span class="pre">one_to_many_md_key</span></tt> is specified, that becomes the metadata
 key that describes the collapsed path. If a value is not specified,
 then it defaults to &#8216;Path&#8217;.</p>
@@ -236,6 +262,7 @@ then it defaults to &#8216;Path&#8217;.</p>
 must be indexable by <tt class="docutils literal"><span class="pre">metadata_f</span></tt>.</p>
 <p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">norm</span></tt> are not supported together.</p>
 <p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">reduce_f</span></tt> are not supported together.</p>
+<p><tt class="docutils literal"><span class="pre">one_to_many</span></tt> and <tt class="docutils literal"><span class="pre">min_group_size</span></tt> are not supported together.</p>
 <p>A final note on space consumption. At present, the <tt class="docutils literal"><span class="pre">one_to_many</span></tt>
 functionality requires a temporary dense matrix representation. This 
 was done so as it initially seems like true support requires rapid
@@ -254,7 +281,7 @@ for multiple <tt class="docutils literal"><span class="pre">SparseObj</span></tt
 
 <dl class="method">
 <dt id="biom.table.Table.delimitedSelf">
-<tt class="descname">delimitedSelf</tt><big>(</big><em>delim='t'</em>, <em>header_key=None</em>, <em>header_value=None</em>, <em>metadata_formatter=&lt;type 'str'&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.delimitedSelf" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">delimitedSelf</tt><big>(</big><em>delim='t'</em>, <em>header_key=None</em>, <em>header_value=None</em>, <em>metadata_formatter=&lt;type 'str'&gt;</em>, <em>observation_column_name='#OTU ID'</em><big>)</big><a class="headerlink" href="#biom.table.Table.delimitedSelf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return self as a string in a delimited form</p>
 <p>Default str output for the Table is just row/col ids and table data
 without any metadata</p>
@@ -266,6 +293,19 @@ observation metadata name (i.e., the column header) in the delimited
 output.</p>
 <p><tt class="docutils literal"><span class="pre">metadata_formatter</span></tt>: a function which takes a metadata entry and 
 returns a formatted version that should be written to file</p>
+<p><tt class="docutils literal"><span class="pre">observation_column_name</span></tt>: the name of the first column in the output
+table, corresponding to the observation IDs. For example, the default
+will look something like:</p>
+<blockquote>
+<div>#OTU ID     Sample1 Sample2
+OTU1        10      2
+OTU2        4       8</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="biom.table.Table.descriptiveEquality">
+<tt class="descname">descriptiveEquality</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#biom.table.Table.descriptiveEquality" title="Permalink to this definition">¶</a></dt>
+<dd><p>For use in testing, describe how the tables are not equal</p>
 </dd></dl>
 
 <dl class="method">
@@ -273,7 +313,7 @@ returns a formatted version that should be written to file</p>
 <tt class="descname">filterObservations</tt><big>(</big><em>f</em>, <em>invert=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.filterObservations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter observations from self based on <tt class="docutils literal"><span class="pre">f</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">f</span></tt> must accept three variables, the observation values, observation
-IDs and observation metadata. The function must only return <tt class="docutils literal"><span class="pre">True</span></tt> or
+ID and observation metadata. The function must only return <tt class="docutils literal"><span class="pre">True</span></tt> or
 <tt class="docutils literal"><span class="pre">False</span></tt>, where <tt class="docutils literal"><span class="pre">True</span></tt> indicates that an observation should be
 retained.</p>
 <p>invert: if <tt class="docutils literal"><span class="pre">invert</span> <span class="pre">==</span> <span class="pre">True</span></tt>, a return value of <tt class="docutils literal"><span class="pre">True</span></tt> from <tt class="docutils literal"><span class="pre">f</span></tt> 
@@ -284,7 +324,7 @@ indicates that an observation should be discarded</p>
 <dt id="biom.table.Table.filterSamples">
 <tt class="descname">filterSamples</tt><big>(</big><em>f</em>, <em>invert=False</em><big>)</big><a class="headerlink" href="#biom.table.Table.filterSamples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter samples from self based on <tt class="docutils literal"><span class="pre">f</span></tt></p>
-<p><tt class="docutils literal"><span class="pre">f</span></tt> must accept three variables, the sample values, sample IDs and 
+<p><tt class="docutils literal"><span class="pre">f</span></tt> must accept three variables, the sample values, sample ID and 
 sample metadata. The function must only return <tt class="docutils literal"><span class="pre">True</span></tt> or <tt class="docutils literal"><span class="pre">False</span></tt>, 
 where <tt class="docutils literal"><span class="pre">True</span></tt> indicates that a sample should be retained.</p>
 <p>invert: if <tt class="docutils literal"><span class="pre">invert</span> <span class="pre">==</span> <span class="pre">True</span></tt>, a return value of <tt class="docutils literal"><span class="pre">True</span></tt> from <tt class="docutils literal"><span class="pre">f</span></tt> 
@@ -385,7 +425,7 @@ can be misleading.</p>
 
 <dl class="method">
 <dt id="biom.table.Table.merge">
-<tt class="descname">merge</tt><big>(</big><em>other</em>, <em>Sample='union'</em>, <em>Observation='union'</em>, <em>sample_metadata_f=&lt;function prefer_self at 0x109887f50&gt;</em>, <em>observation_metadata_f=&lt;function prefer_self at 0x109887f50&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.merge" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">merge</tt><big>(</big><em>other</em>, <em>Sample='union'</em>, <em>Observation='union'</em>, <em>sample_metadata_f=&lt;function prefer_self at 0x2394e60&gt;</em>, <em>observation_metadata_f=&lt;function prefer_self at 0x2394e60&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge two tables together</p>
 <p>The axes, samples and observations, can be controlled independently. 
 Both can either work on <tt class="docutils literal"><span class="pre">union</span></tt> or <tt class="docutils literal"><span class="pre">intersection</span></tt>.</p>
@@ -458,7 +498,7 @@ place.</p>
 
 <dl class="method">
 <dt id="biom.table.Table.sortByObservationId">
-<tt class="descname">sortByObservationId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x109887ed8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortByObservationId" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sortByObservationId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x2394de8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortByObservationId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a table where observations are sorted by <tt class="docutils literal"><span class="pre">sort_f</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">sort_f</span></tt> must take a single parameter: the list of observation 
 ids</p>
@@ -466,7 +506,7 @@ ids</p>
 
 <dl class="method">
 <dt id="biom.table.Table.sortBySampleId">
-<tt class="descname">sortBySampleId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x109887ed8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortBySampleId" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sortBySampleId</tt><big>(</big><em>sort_f=&lt;function natsort at 0x2394de8&gt;</em><big>)</big><a class="headerlink" href="#biom.table.Table.sortBySampleId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a table where samples are sorted by <tt class="docutils literal"><span class="pre">sort_f</span></tt></p>
 <p><tt class="docutils literal"><span class="pre">sort_f</span></tt> must take a single parameter: the list of sample ids</p>
 </dd></dl>
@@ -509,6 +549,14 @@ value (int or float) that replaces the provided observation value</p>
 <p><tt class="docutils literal"><span class="pre">f</span></tt> must take three values: a sample value (int or float), a sample 
 id, and a sample metadata entry, and return a single value (int or 
 float) that replaces the provided sample value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biom.table.Table.transpose">
+<tt class="descname">transpose</tt><big>(</big><big>)</big><a class="headerlink" href="#biom.table.Table.transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new table that is the transpose of this table.</p>
+<p>The returned table will be an entirely new table, including copies of
+the (transposed) data, sample/observation IDs and metadata.</p>
 </dd></dl>
 
 </dd></dl>
@@ -751,8 +799,8 @@ float) that replaces the provided sample value</p>
 
     <div class="footer">
         &copy; Copyright 2012, The BIOM Project.
-      Last updated on Jan 28, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Last updated on Aug 27, 2013.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
 <script type="text/javascript">
 
